@@ -1,0 +1,15 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.form-container {
+  max-width: 400px;
+  width: 100%;
+}
+
+.text-danger{
+    font-size: 0.5rem;
+}

@@ -1,0 +1,40 @@
+<div class="container">
+    <div class="form-container">
+        <h2 class="mb-2 text-center">LOGIN</h2>
+        <form [formGroup]="myForm" (ngSubmit)="signIn()">
+            <div class="row">
+                <div class="mb-3 mt-5">
+                    <p-floatlabel>
+                        <input pInputText type="email" class="form-control" id="email" formControlName="email" />
+                        <label for="email" class="form-label">Email</label>
+                    </p-floatlabel>
+                    @if (myForm.get('email')?.touched && myForm.get('email')?.invalid) {
+                    <div class="text-danger">
+                        Este campo es obligatorio
+                    </div>
+                    }
+                </div>
+                <div class="mb-3 mt-2">
+                    <p-floatlabel>
+                        <input pInputText id="password" autocomplete="off" formControlName="password"
+                            class="form-control" />
+                        <label for="password">Password</label>
+                    </p-floatlabel>
+                    @if (myForm.get('password')?.touched &&
+                    myForm.get('password')?.invalid) {
+                    <div class="text-danger">
+                        Este campo es obligatorio
+                    </div>
+                    }
+                </div>
+                @if (loginError) {<div class="text-danger">
+                    Usuario o contraseña incorrectos.
+                    </div>
+                }
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary">Iniciar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
