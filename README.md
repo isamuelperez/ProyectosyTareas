@@ -24,5 +24,5 @@ Importante: tener la version de node y Angular correspondiente a la imagen anter
 ng serve --o
 
 LogIn:
-user: admin
-password: admin
+- user: admin
+- password: admin
