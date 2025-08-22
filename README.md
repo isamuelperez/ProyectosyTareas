@@ -16,9 +16,9 @@ Importante: tener la version de node y Angular correspondiente a la imagen anter
 
 ## Instalación
 1. Clona el repositorio:
-   1.1 git clone https://github.com/isamuelperez/ProyectosyTareas.git
-   1.2 cd ProyectosyTareas
-   1.3 Instala las dependencias (npm install)
+2. git clone https://github.com/isamuelperez/ProyectosyTareas.git
+3. cd ProyectosyTareas
+4. Instala las dependencias (npm install)
 
 ## Ejecución
 ng serve --o
