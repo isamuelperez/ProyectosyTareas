@@ -15,10 +15,9 @@ export class AuthService {
   }
 
   logIn(username: string, password: string): Observable<boolean> {
-    console.log(username);
-    if (username === 'admin' && password === 'admin123') {
+    if (username === 'admin' && password === 'admin') {
       localStorage.setItem('isLoggedIn', 'true');
-      this.loadProyectos();
+      //this.loadProyectos();
       this.router.navigate(['/home']);
       return of(true);
     }
@@ -28,18 +27,8 @@ export class AuthService {
   logOut(): void {
     localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('proyectos');
+    localStorage.removeItem('tareas');
     this.router.navigate(['/login']);
-  }
-
-  loadProyectos() {
-    this._apiService.getAll("users").subscribe({
-      next: (resp) => {
-       this._apiService.SaveProyecto(resp);
-      },
-      error: (error) => {
-        console.error('Error al cargar los proyectos:', error);
-      }
-    });
   }
   
 }

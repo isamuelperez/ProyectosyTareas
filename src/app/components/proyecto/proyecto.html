@@ -34,8 +34,8 @@
                 <td>{{proyecto.username}}</td>
                 <td>
                     <div class="d-flex">
-                        <p-button icon="pi pi-pencil" (click)="editproyecto(proyecto)" class="px-1" [rounded]="true" severity="success" />
-                        <p-button icon="pi pi-trash" (click)="deleteproyecto(proyecto.id)" [rounded]="true" severity="danger" />
+                        <p-button icon="pi pi-pencil" (click)="edit(proyecto)" class="px-1" [rounded]="true" severity="success" />
+                        <p-button icon="pi pi-trash" (click)="delete(proyecto.id)" [rounded]="true" severity="danger" />
                     </div>
                 </td>
             </tr>
@@ -96,7 +96,7 @@
 
     <ng-template pTemplate="footer">
         <button type="button" class="btn btn-danger" (click)="hideDialog()">Cancelar</button>
-        <button type="submit" class="p-button-success" (click)="saveProyecto()" >Guardar</button>
+        <button type="submit" class="p-button-success" (click)="save()" >Guardar</button>
     </ng-template>
 
 </p-dialog>

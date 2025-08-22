@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ApiService } from '../../services/api/api-service';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -12,27 +12,31 @@ import { InputIconModule } from 'primeng/inputicon';
 import { DialogModule } from 'primeng/dialog';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
+import { Home } from "../home/home";
+import { threadId } from 'worker_threads';
+import { Subject, takeUntil } from 'rxjs';
+import { ProyectoService } from '../../services/api/proyecto-service';
 
 @Component({
   selector: 'app-proyecto',
   imports: [
     CommonModule,
-    ToastModule, 
-    ConfirmDialogModule, 
-    TableModule, 
-    ButtonModule,  
-    FormsModule, 
-    IconFieldModule, 
-    InputIconModule, 
+    ToastModule,
+    ConfirmDialogModule,
+    TableModule,
+    ButtonModule,
+    FormsModule,
+    IconFieldModule,
+    InputIconModule,
     DialogModule,
     ReactiveFormsModule,
     FloatLabelModule,
     InputTextModule,
-  ],
+],
   templateUrl: './proyecto.html',
   styleUrl: './proyecto.css'
 })
-export class Proyecto implements OnInit{
+export class Proyecto implements OnInit, OnDestroy, AfterViewInit {
 
   proyectos: any = [];
   filterValue: string = '';
@@ -43,24 +47,55 @@ export class Proyecto implements OnInit{
   proyecto : any = null;
   isEdit: boolean = false;
   submitted: boolean = false;
+  private searchSubject$ = new Subject<string>();
+  private unsubscribe$ = new Subject<void>();
 
   id: any = null;
   
 
   constructor(
     private _apiService: ApiService,
+    private _proyectoService: ProyectoService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
     private fb: FormBuilder,
+    private cd: ChangeDetectorRef
   ){}
 
   ngOnInit(): void {
-    this.proyectos = this._apiService.GetProyectos();
+    this.load()
     this.myForm = this.fb.group({
       titulo: ['', [Validators.required]],
       descripcion: ['', [Validators.required]],
     });
   }
+  
+  ngAfterViewInit(){
+    setTimeout(()=>{
+      this.load();
+      this.proyectos = this._proyectoService.GetAll();
+      this.cd.detectChanges();
+    },1000)
+  }
+
+  load() {
+    this._apiService.getAll("users").subscribe({
+      next: (resp) => {
+       this._proyectoService.Save(resp);
+       this.cd.detectChanges();
+      },
+      error: (error) => {
+         this.messageService.add({ severity: 'danger', summary: 'Fallo', detail: 'Error al obtener los registros', life: 3000 });
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
+  
 
   hideDialog(){
     this.showDialog = false;
@@ -74,7 +109,7 @@ export class Proyecto implements OnInit{
     this.showDialog = true;
   }
 
-  editproyecto(proyecto: any): void {
+  edit(proyecto: any): void {
     this.proyecto = { ...proyecto};
 
     this.id = this.proyecto.id
@@ -90,7 +125,7 @@ export class Proyecto implements OnInit{
     this.showDialog = true;
   }
 
-  saveProyecto(): void {
+  save(): void {
 
     if (!this.myForm.invalid) {
 
@@ -101,9 +136,9 @@ export class Proyecto implements OnInit{
           name: this.myForm.get("titulo")?.value,
           username: this.myForm.get("descripcion")?.value,
         }
-        this._apiService.updateProyecto(project);
+        this._proyectoService.update(project);
         this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Se actualizo correctamente', life: 3000 });
-         this.proyectos = this._apiService.GetProyectos();
+        this.proyectos = this._proyectoService.GetAll();
         this.hideDialog();
       } else {
 
@@ -115,19 +150,18 @@ export class Proyecto implements OnInit{
         }
 
         this.proyectos.push(project);
-        this._apiService.SaveProyecto(this.proyectos);
+        this._proyectoService.Save(this.proyectos);
         this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Se registro correctamente', life: 3000 });
-        this.proyectos = this._apiService.GetProyectos();
+        this.proyectos = this._proyectoService.GetAll();
         this.hideDialog();
       }
     } else {
-      console.log('datos invalidos');
       this.myForm.markAllAsTouched();
     }
 
   }
 
-  deleteproyecto(id: any){
+  delete(id: any){
 
     this.confirmationService.confirm({
       message: '¿Estás seguro de que quieres eliminar el registro ?',
@@ -135,9 +169,9 @@ export class Proyecto implements OnInit{
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         if (id) {
-          if(this._apiService.deleteProyecto(id)){
+          if(this._proyectoService.delete(id)){
             this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Se elimino el registro', life: 3000 });
-            this.proyectos = this._apiService.GetProyectos();
+            this.proyectos = this._proyectoService.GetAll();
           }
         }
       }

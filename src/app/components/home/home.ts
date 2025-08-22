@@ -2,10 +2,12 @@ import { Component } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { MenubarModule } from 'primeng/menubar';
 import { AuthService } from '../../services/auth/auth-service';
+import { RouterOutlet } from '@angular/router';
+
 
 @Component({
   selector: 'app-home',
-  imports: [MenubarModule],
+  imports: [MenubarModule, RouterOutlet],
   templateUrl: './home.html',
   styleUrl: './home.css'
 })
@@ -14,13 +16,13 @@ export class Home {
   items: MenuItem[] = [
     {
       label: 'Proyectos',
-      icon: 'pi pi-id-card',
-      routerLink: ['/proyectos']
+      icon: 'pi pi-calendar-plus',
+      routerLink: ['/home/proyectos']
     },
     {
       label: 'Tareas',
-      icon: 'pi pi-user',
-      routerLink: ['/tareas']
+      icon: 'pi pi-book',
+      routerLink: ['/home/tareas']
     },
   ];
 

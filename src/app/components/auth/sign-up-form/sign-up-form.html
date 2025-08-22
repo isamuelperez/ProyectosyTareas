@@ -1,12 +1,12 @@
 <div class="container">
-    <div class="form-container">
-        <h2 class="mb-2 text-center">LOGIN</h2>
+    <div class="form-container text-center">
         <form [formGroup]="myForm" (ngSubmit)="signIn()">
             <div class="row">
+                <i class="pi pi-user" style="font-size: 5.5rem;color: #0d6efd;"></i>
                 <div class="mb-3 mt-5">
                     <p-floatlabel>
                         <input pInputText type="email" class="form-control" id="email" formControlName="email" />
-                        <label for="email" class="form-label">Email</label>
+                        <label for="email" class="form-label">User</label>
                     </p-floatlabel>
                     @if (myForm.get('email')?.touched && myForm.get('email')?.invalid) {
                     <div class="text-danger">
@@ -16,8 +16,7 @@
                 </div>
                 <div class="mb-3 mt-2">
                     <p-floatlabel>
-                        <input pInputText id="password" autocomplete="off" formControlName="password"
-                            class="form-control" />
+                        <p-password class="d-grid"  formControlName="password"  [feedback]="false" [toggleMask]="true" />
                         <label for="password">Password</label>
                     </p-floatlabel>
                     @if (myForm.get('password')?.touched &&
@@ -27,7 +26,7 @@
                     </div>
                     }
                 </div>
-                @if (loginError) {<div class="text-danger">
+                @if (loginError) {<div class="text-danger text-center mb-2 fs-6 text">
                     Usuario o contraseña incorrectos.
                     </div>
                 }

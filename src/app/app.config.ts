@@ -17,10 +17,10 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes), provideClientHydration(withEventReplay()),
     provideAnimationsAsync(),
     providePrimeNG({
-            theme: {
-                preset: Aura
-            }
-        }),
-         ConfirmationService, MessageService
+      theme: {
+        preset: Aura
+      }
+    }),
+    ConfirmationService, MessageService
   ]
 };

@@ -8,6 +8,11 @@
 .form-container {
   max-width: 400px;
   width: 100%;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  padding: 40px;
+  z-index: 10; 
 }
 
 .text-danger{

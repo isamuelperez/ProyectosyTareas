@@ -9,10 +9,12 @@ import {
 import { InputTextModule } from 'primeng/inputtext';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { AuthService } from '../../../services/auth/auth-service';
+import { PasswordModule } from 'primeng/password';
+
 
 @Component({
   selector: 'app-sign-up-form',
-  imports: [ ReactiveFormsModule, InputTextModule, FloatLabelModule,],
+  imports: [ ReactiveFormsModule, InputTextModule, FloatLabelModule,PasswordModule],
   templateUrl: './sign-up-form.html',
   styleUrl: './sign-up-form.css'
 })
@@ -36,9 +38,15 @@ export class SignUpForm implements OnInit {
 
   signIn(){
     this.authService.logIn(this.myForm.get("email")?.value, this.myForm.get("password")?.value).subscribe(success => {
-      if (!success) {
+
+      if(!this.myForm.invalid){
+        if (!success) {
         this.loginError = true;
       }
+      }else{
+        this.myForm.markAllAsTouched();
+      }
+      
     });
   }
 }
